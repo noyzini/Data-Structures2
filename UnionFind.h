@@ -11,8 +11,9 @@
 class UnionFind {
 private:
     AVLTree<Team,int> * teams;
-    HashTable players;
+    HashTable& players;
 public:
+    UnionFind(AVLTree<Team,int>* teams,HashTable& players);
     Team* find(int playerId);
     Team* unite(int team1, int team2);
     void removeTeam(int teamId);

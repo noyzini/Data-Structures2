@@ -68,6 +68,9 @@ void UnionFind::removeTeam(int teamId) {
     team->setRootPlayer(nullptr);
 }
 
+UnionFind::UnionFind(AVLTree<Team, int>* teams, HashTable& players) :teams(teams), players(players){
+}
+
 
 
 

@@ -31,6 +31,8 @@ void print(string cmd, output_t<T> res);
 
 int main()
 {
+    int* x = new int(4);
+
 	cin >> std::boolalpha;
 	
 	int pid, tid, tid2;

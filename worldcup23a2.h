@@ -22,6 +22,9 @@ private:
 	//
 	// Here you may add anything you want
 	//
+    AVLTree<> teamsTree;
+    RankedTree teamsTreeRanked;
+    UnionFind playerGroups;
 	
 public:
 	// <DO-NOT-MODIFY> {

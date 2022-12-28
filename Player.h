@@ -3,6 +3,7 @@
 
 #include "Team.h"
 #include "AVLTree.h"
+#include "wet2util.h"
 
 class Team;
 
@@ -10,27 +11,25 @@ class Player {
 private:
 
     int playerId;
-    int teamId;
-    int goals;
     int cards;
     int gamesPlayed;
     bool isGoalKeeper;
-    Team* teamPtr;
     int negativeFactor;
 
-    Player* nextBetter;
-    Player* nextWorse;
+    const permutation_t &selfSpirit;
+    permutation_t teamSpirit; //PI
+    permutation_t color;
+
+    Player* nextInHash;
+    Player* parent;
+    Team* teamPtr;
 
 public:
     Player() = default;
-    Player(int playerId, int teamId, int gamesPlayed, int goals, int cards, bool goalKeeper);
-    Player(Player& p) = default;
-    ~Player() = default;
+    Player(int playerId,int gamesPlayed, int cards, bool goalKeeper, const permutation_t &selfSpirit);
+    //Player(Player& p) = default;
+    ~Player();
     int getId() const;
-    int getTeamId() const;
-    void setTeamId(int id);
-    int getGoals() const;
-    void setGoals(int goals);
     int getCards() const;
     void setCards(int cards);
     int getGamesPlayed() const;
@@ -43,17 +42,12 @@ public:
     void setTeamPtr (Team* t);
     Team* getTeamPtr() const;
 
-    void setNextBetter(Player* player);
-    Player* getNextBetter();
-    void setNextWorse(Player* player);
-    Player* getNextWorse();
-
-    Player* closestPlayer( Player& player1, Player& player2);
-
+    /*
     bool operator>(const Player& player2) const;
     bool operator<(const Player& player2) const;
     bool operator!=(Player& player2) const;
     bool operator==(Player& player2) const;
+     */
 };
 
 

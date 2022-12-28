@@ -1,7 +1,8 @@
 #include "worldcup23a2.h"
 
-world_cup_t::world_cup_t()
+world_cup_t::world_cup_t() : playerGroups(UnionFind(&teamsTree,playersHashTable))
 {
+
 }
 
 world_cup_t::~world_cup_t()
@@ -154,6 +155,15 @@ output_t<permutation_t> world_cup_t::get_partial_spirit(int playerId)
 
 StatusType world_cup_t::buy_team(int teamId1, int teamId2)
 {
-	// TODO: Your code goes here
+    if(teamId1<=0 || teamId2<=0 || teamId1==teamId2 )
+    {
+        return StatusType::INVALID_INPUT;
+    }
+    Team *team1 = this->teamsTree.find(teamId1);
+    Team *team2 = this->teamsTree.find(teamId2);
+    if (team1 == nullptr || team2 == nullptr) {
+        return StatusType::FAILURE;
+    }
+    Team* unitedTeam = playerGroups.unite(teamId1,teamId2);
 	return StatusType::SUCCESS;
 }

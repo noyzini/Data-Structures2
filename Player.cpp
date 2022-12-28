@@ -4,7 +4,7 @@
 Player::Player(int playerId, const permutation_t &spirit, int gamesPlayed, int ability, int cards,
                bool goalKeeper) :
         playerId(playerId), selfSpirit(spirit), gamesPlayed(gamesPlayed),ability(ability), cards(cards), isGoalKeeper(goalKeeper),parent(
-        nullptr),teamPtr(nullptr),negativeFactor(0)
+        nullptr),teamPtr(nullptr),negativeFactor(0),rGamesPlayed(0)
 {
     color = permutation_t::neutral();
     teamSpirit = permutation_t::neutral();
@@ -127,6 +127,14 @@ permutation_t Player::getTeamSpirit() {
 
 void Player::setTeamSpirit(permutation_t t) {
     teamSpirit=t;
+}
+
+int Player::getRGamesPlayed() const {
+    return rGamesPlayed;
+}
+
+void Player::setRGamesPlayed(int newr) {
+    rGamesPlayed=newr;
 }
 
 

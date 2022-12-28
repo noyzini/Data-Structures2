@@ -21,6 +21,8 @@ private:
     permutation_t teamSpirit; //PI
     permutation_t color;
 
+    int rGamesPlayed;
+
     Player* nextInHash;
     Player* parent;
     Team* teamPtr;
@@ -40,6 +42,9 @@ public:
     int getNegativeFactor() const;
     int getAbility() const;
     void setAbility(int newAbility);
+
+    int getRGamesPlayed() const;
+    void setRGamesPlayed(int newr);
 
     permutation_t getTeamSpirit();
     void setTeamSpirit(permutation_t t);

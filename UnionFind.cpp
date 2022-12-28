@@ -12,16 +12,16 @@ Team* UnionFind::find(int playerId) {
     {
         return nullptr;
     }
-    int sumGames=source->getGamesPlayed();
-    permutation_t sumTeamSpirit=source->getTeamSpirit();
+    int sumGames=0;
+    permutation_t sumTeamSpirit=permutation_t::neutral();
     while (source->getParent()!= nullptr)
     {
-        source=source->getParent();
-        sumGames+=source->getGamesPlayed();
+        sumGames+=source->getRGamesPlayed();
         sumTeamSpirit=source->getTeamSpirit()*sumTeamSpirit;
+        source=source->getParent();
     }
     Team* team=source->getTeamPtr();
-    //running up again and making "cuts" connecting playersHashTable on the chain to the root(source)
+    //running up again and making "cuts" connecting players on the chain to the root(source)
     Player* runner= players.find(playerId);
     Player* parent;
     int gamesToSub=0;
@@ -32,11 +32,11 @@ Team* UnionFind::find(int playerId) {
         runner->setParent(source);
 
         int newGamesPlayed=sumGames-gamesToSub;
-        gamesToSub+=runner->getGamesPlayed();
+        gamesToSub+=runner->getRGamesPlayed();
         permutation_t newSpirit=sumTeamSpirit*subTeamSpirit.inv();
-        subTeamSpirit=runner->getTeamSpirit()*sumTeamSpirit;
+        subTeamSpirit=runner->getTeamSpirit()*subTeamSpirit;
 
-        runner->setGamesPlayed(newGamesPlayed);
+        runner->setRGamesPlayed(newGamesPlayed);
         runner->setTeamSpirit(newSpirit);
 
         runner=parent;
@@ -45,21 +45,51 @@ Team* UnionFind::find(int playerId) {
 }
 
 Team *UnionFind::unite(int team1, int team2) {
-    Team* team_first = teams->find(team1);
-    Team* team_second= teams->find(team2);
+    Team* buyer = teams->find(team1);
+    Team* bought= teams->find(team2);
     //choosing the bigger team and uniting to that team
-    if(team_first->getNumPlayers()>team_second->getNumPlayers())
+    // team 1 is bigger and is the buyer
+    if(buyer->getNumPlayers()==0 && bought->getNumPlayers()==0)
     {
-        team_second->getRootPlayer()->setParent(team_first->getRootPlayer());
-        this->teams->remove(team2);
-        return team_first;
     }
-    else
+    else if(buyer->getNumPlayers() >= bought->getNumPlayers())
     {
-        team_first->getRootPlayer()->setParent(team_second->getRootPlayer());
-        this->teams->remove(team1);
-        return team_second;
+        if(bought->getNumPlayers()!=0) {
+            bought->getRootPlayer()->setParent(buyer->getRootPlayer());
+            //updating for spirit
+            bought->getRootPlayer()->setTeamSpirit(buyer->getTeamSpirit() * bought->getRootPlayer()->getTeamSpirit());
+            buyer->setTeamSpirit(buyer->getTeamSpirit() * bought->getTeamSpirit());
+            //updating games played
+            bought->getRootPlayer()->setRGamesPlayed(
+                    bought->getRootPlayer()->getRGamesPlayed() - buyer->getRootPlayer()->getRGamesPlayed());
+
+            bought->getRootPlayer()->setTeamPtr(nullptr);
+        }
     }
+    else// team 2 is bigger and team 1 is the buyer
+    {
+        if(buyer->getNumPlayers()!=0) {
+            buyer->getRootPlayer()->setParent(bought->getRootPlayer());
+            //updating for spirit
+            bought->getRootPlayer()->setTeamSpirit(buyer->getTeamSpirit() * bought->getRootPlayer()->getTeamSpirit());
+            buyer->getRootPlayer()->setTeamSpirit(
+                    bought->getRootPlayer()->getTeamSpirit().inv() * buyer->getRootPlayer()->getTeamSpirit());
+            buyer->setTeamSpirit(buyer->getTeamSpirit() * bought->getTeamSpirit());
+            //updating games played
+            buyer->getRootPlayer()->setRGamesPlayed(buyer->getRootPlayer()->getRGamesPlayed() - bought->getRootPlayer()->getRGamesPlayed());
+
+            buyer->getRootPlayer()->setTeamPtr(nullptr);
+        }
+        buyer->setRootPlayer(bought->getRootPlayer());
+        bought->getRootPlayer()->setTeamPtr(buyer);
+    }
+    buyer->addPoints(bought->getPoints());
+    buyer->setNumPlayers(bought->getNumPlayers());
+    buyer->setNumGoalKeepers(buyer->getNumGoalKeepers()+bought->getNumGoalKeepers());
+    buyer->setSumAbility(buyer->getSumAbility()+bought->getSumAbility());
+
+    this->teams->remove(team2);
+    return buyer;
 }
 
 void UnionFind::removeTeam(int teamId) {
@@ -70,6 +100,7 @@ void UnionFind::removeTeam(int teamId) {
 
 UnionFind::UnionFind(AVLTree<Team, int>* teams, HashTable& players) :teams(teams), players(players){
 }
+
 
 
 

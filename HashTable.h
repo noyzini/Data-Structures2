@@ -9,18 +9,21 @@
 
 class HashTable
 {
+    typedef Player* PlayerPtr;
 private:
+
+    static const int INIT_TABLE_SIZE = 10;
     Player** arr; //dynamic arr
     int tableSize;
     int numPlayers;
     const int LOAD_FACTOR = 1;
-    const int INIT_TABLE_SIZE = 10;
 
-    const ERROR_PLAYER_EXSITS = -1;
-    const OK = 1;
 
-    void rehash();
-    void expend();
+    static const int ERROR_PLAYER_EXISTS = -1;
+    static const int OK = 1;
+
+    void doubleArrSize();
+    static int addToArrByFunction(Player** arr, int arrSize, Player* newPlayer);
 
 public:
     HashTable();
@@ -28,8 +31,7 @@ public:
     int insert(int playerId, int teamId,
                 const permutation_t &spirit, int gamesPlayed,
                 int ability, int cards, bool goalKeeper);
-    Player* find(int playerId);
-
+    Player* find(int playerId) const;
 };
 
 #endif //DATA_STRUCTURES2_HASHTABLE_H

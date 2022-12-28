@@ -48,6 +48,8 @@ public:
 
     permutation_t getTeamSpirit();
     void setTeamSpirit(permutation_t t);
+    permutation_t getSelfSpirit();
+
 
     void setNextInHash(Player* player);
     Player* getNextInHash() const;

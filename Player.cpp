@@ -137,4 +137,8 @@ void Player::setRGamesPlayed(int newr) {
     rGamesPlayed=newr;
 }
 
+permutation_t Player::getSelfSpirit() {
+    return selfSpirit;
+}
+
 

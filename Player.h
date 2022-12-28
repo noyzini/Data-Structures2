@@ -13,6 +13,7 @@ private:
     int playerId;
     int cards;
     int gamesPlayed;
+    int ability;
     bool isGoalKeeper;
     int negativeFactor;
 
@@ -26,7 +27,7 @@ private:
 
 public:
     Player() = default;
-    Player(int playerId,int gamesPlayed, int cards, bool goalKeeper, const permutation_t &selfSpirit);
+    Player(int playerId, const permutation_t &spirit, int gamesPlayed, int ability, int cards, bool goalKeeper);
     //Player(Player& p) = default;
     ~Player();
     int getId() const;
@@ -37,7 +38,11 @@ public:
     bool getIsGoalKeeper() const;
     void setNegativeFactor(int factor);
     int getNegativeFactor() const;
+    int getAbility() const;
+    void setAbility(int newAbility);
 
+    void setNextInHash(Player* player);
+    Player* getNextInHash() const;
 
     void setTeamPtr (Team* t);
     Team* getTeamPtr() const;

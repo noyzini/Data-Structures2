@@ -16,13 +16,14 @@
 #define WORLDCUP23A2_H_
 
 #include "wet2util.h"
+#include "Team.h"
 
 class world_cup_t {
 private:
 	//
 	// Here you may add anything you want
 	//
-    AVLTree<> teamsTree;
+    AVLTree<Team,int> teamsTree;
     RankedTree teamsTreeRanked;
     UnionFind playerGroups;
 	

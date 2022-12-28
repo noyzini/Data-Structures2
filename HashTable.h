@@ -16,13 +16,16 @@ private:
     const int LOAD_FACTOR = 1;
     const int INIT_TABLE_SIZE = 10;
 
+    const ERROR_PLAYER_EXSITS = -1;
+    const OK = 1;
+
     void rehash();
     void expend();
 
 public:
     HashTable();
     ~HashTable();
-    void insert(int playerId, int teamId,
+    int insert(int playerId, int teamId,
                 const permutation_t &spirit, int gamesPlayed,
                 int ability, int cards, bool goalKeeper);
     Player* find(int playerId);

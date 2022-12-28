@@ -12,9 +12,27 @@ HashTable::~HashTable() {
     delete[] arr;
 }
 
-void HashTable::insert(int playerId, int teamId, const permutation_t &spirit, int gamesPlayed, int ability, int cards,
+int HashTable::insert(int playerId, int teamId, const permutation_t &spirit, int gamesPlayed, int ability, int cards,
                        bool goalKeeper)
 {
-    Player newPlayer = new Player();
+    Player* newPlayer = new Player(playerId,spirit, gamesPlayed,ability,cards,goalKeeper);
+    int index = playerId % tableSize; //our hash function
+    if (arr[index] == nullptr)
+        arr[index] = newPlayer;
+    else
+    {
+        Player* temp = arr[index];
+        if (temp->getId() == playerId)
+            return ERROR_PLAYER_EXSITS;
+        while (temp->getNextInHash() != nullptr)
+        {
+            temp = temp->getNextInHash();
+            if (temp->getId() == playerId)
+                return ERROR_PLAYER_EXSITS;
+        }
+    }
 
+
+
+    return OK;
 }

@@ -1,12 +1,13 @@
 #include "Player.h"
 
 
-Player::Player(int playerId, int gamesPlayed, int cards, bool goalKeeper, const permutation_t &selfSpirit) :
-        playerId(playerId), gamesPlayed(gamesPlayed),cards(cards),isGoalKeeper(goalKeeper), selfSpirit(selfSpirit)
+Player::Player(int playerId, const permutation_t &spirit, int gamesPlayed, int ability, int cards,
+               bool goalKeeper) :
+        playerId(playerId), selfSpirit(spirit), gamesPlayed(gamesPlayed),ability(ability), cards(cards), isGoalKeeper(goalKeeper)
 {
-    permutation_t t = permutation_t();
-    color = t.neutral();
-    teamSpirit = t.neutral();
+    color = permutation_t::neutral();
+    teamSpirit = permutation_t::neutral();
+    nextInHash = nullptr;
 }
 
 int Player::getId() const{
@@ -90,4 +91,25 @@ void Player::setTeamPtr(Team *t) {
 Team *Player::getTeamPtr() const {
     return this->teamPtr;
 }
+
+Player::~Player() {
+    delete nextInHash;
+}
+
+void Player::setNextInHash(Player *player) {
+    nextInHash = player;
+}
+
+Player *Player::getNextInHash() const {
+    return nextInHash;
+}
+
+int Player::getAbility() const {
+    return ability;
+}
+
+void Player::setAbility(int newAbility) {
+    this->ability = newAbility;
+}
+
 

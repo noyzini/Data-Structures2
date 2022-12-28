@@ -13,18 +13,17 @@ private:
     int points;
     int numPlayers;
     int numGoalKeepers;
-    int power;
+    int sumAbility;
     int gamesPlayedFactor;
 
-    Player* top_player;
-    AVLTree<Player*,int>* playersIdTreePtr;
-    AVLTree<Player*,Player>* playersScoresTreePtr;
+    permutation_t teamSpirit;
+    Player* rootPlayer;
 
 public:
-    bool deleteTree = true;
-    Team(int teamId, int points);
+
+    Team(int teamId);
     Team(Team& team) = default;
-    ~Team();
+    ~Team() = default;
     int getTeamId() const;
     int getFactorGamesPlayed() const;
     int getNumPlayers() const;
@@ -33,22 +32,19 @@ public:
     bool haveGoalKeeper() const;
     int getNumGoalKeepers() const;
     void setNumGoalKeepers(int num);
-    bool isValidForWorldCup() const;
-    void insert(Player* player);
-    void remove(Player* player);
+
     int getScore() const;
     void addPoints(int newPoints);
-    int getPower() const;
     int getPoints() const;
+    int getPower() const;
+    int getSumAbility() const;
     bool canPlay() const;
-    void setPower( int power);
-    Player* getTopPlayer() const;
-    void setTopPlayer(Player* top);
-    AVLTree<Player*,int>* getPlayersIdTree() const;
-    void setPlayersIdTree(AVLTree<Player*,int>* tree);
-    AVLTree<Player*,Player>* getPlayersScoreTree() const;
-    void setPlayersScoresTree(AVLTree<Player*,Player>* tree);
-    void updatePlayersId();
+    void setSumAbility( int SumAbility);
+
+    Player* getRootPlayer();
+    void setRootPlayer(Player* player);
+    permutation_t getTeamSpirit();
+    void setTeamSpirit(permutation_t newSpirit);
 };
 
 #endif //DATA_STRUCTURES_TEAM_H

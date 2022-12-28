@@ -41,11 +41,16 @@ public:
     int getAbility() const;
     void setAbility(int newAbility);
 
+    permutation_t getTeamSpirit();
+    void setTeamSpirit(permutation_t t);
+
     void setNextInHash(Player* player);
     Player* getNextInHash() const;
 
     void setTeamPtr (Team* t);
     Team* getTeamPtr() const;
+    Player* getParent();
+    void  setParent (Player* parent);
 
     /*
     bool operator>(const Player& player2) const;

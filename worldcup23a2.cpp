@@ -2,24 +2,48 @@
 
 world_cup_t::world_cup_t()
 {
-	// TODO: Your code goes here
 }
 
 world_cup_t::~world_cup_t()
 {
-	// TODO: Your code goes here
+    // TODO: Your code goes here
 }
 
 StatusType world_cup_t::add_team(int teamId)
 {
-	// TODO: Your code goes here
-	return StatusType::SUCCESS;
+    if (teamId <= 0)
+        return StatusType::INVALID_INPUT;
+    if (teamsTree.find(teamId) == nullptr)
+        return StatusType::FAILURE;
+    try {
+        Team* newTeam = new Team(teamId);
+        teamsTree.insert(*newTeam,teamId);
+        delete newTeam;
+    }
+    catch (std::bad_alloc& e) {
+        return StatusType::ALLOCATION_ERROR;
+    }
+    return StatusType::SUCCESS;
 }
 
 StatusType world_cup_t::remove_team(int teamId)
 {
-	// TODO: Your code goes here
-	return StatusType::FAILURE;
+    if (teamId <= 0)
+        return StatusType::INVALID_INPUT;
+    Team* team= teamsTree.find(teamId);
+    if(team== nullptr || team->getNumPlayers()>0)
+    {
+        return StatusType::FAILURE;
+    }
+    try {
+        playerGroups.removeTeam(teamId);
+        teamsTree.remove(teamId);
+    }
+    catch (const std::bad_alloc& e)
+    {
+        return StatusType::ALLOCATION_ERROR;
+    }
+    return StatusType::SUCCESS;
 }
 
 StatusType world_cup_t::add_player(int playerId, int teamId,
@@ -32,8 +56,46 @@ StatusType world_cup_t::add_player(int playerId, int teamId,
 
 output_t<int> world_cup_t::play_match(int teamId1, int teamId2)
 {
-	// TODO: Your code goes here
-	return StatusType::SUCCESS;
+    if(teamId1<=0 || teamId2<=0 || teamId1==teamId2 )
+    {
+        return StatusType::INVALID_INPUT;
+    }
+    try {
+        Team *team1 = this->teamsTree.find(teamId1);
+        Team *team2 = this->teamsTree.find(teamId2);
+        if (team1 == nullptr || team2 == nullptr || !team1->canPlay() || !team2->canPlay()) {
+            return StatusType::FAILURE;
+        }
+        team1->setFactorGamesPlayed(1 + team1->getFactorGamesPlayed());
+        team2->setFactorGamesPlayed(1 + team2->getFactorGamesPlayed());
+        if (team1->getScore() == team2->getScore()) {
+            if(team1->getTeamSpirit().strength()==team2->getTeamSpirit().strength())
+            {
+                team1->addPoints(1);
+                team2->addPoints(1);
+                return 0;
+            }
+            else if(team1->getTeamSpirit().strength()>team2->getTeamSpirit().strength())
+            {
+                team1->addPoints(3);
+                return 2;
+            } else{
+                team2->addPoints(3);
+                return 4;
+            }
+
+        } else if (team1->getScore() > team2->getScore()) {
+            team1->addPoints(3);
+            return 1;
+        } else {
+            team2->addPoints(3);
+            return 3;
+        }
+    }
+    catch (const std::bad_alloc& e)
+    {
+        return StatusType::ALLOCATION_ERROR;
+    }
 }
 
 output_t<int> world_cup_t::num_played_games_for_player(int playerId)

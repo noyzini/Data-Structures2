@@ -17,15 +17,16 @@
 
 #include "wet2util.h"
 #include "Team.h"
+#include "UnionFind.h"
+#include "AVLTree.h"
+#include "HashTable.h"
 
 class world_cup_t {
 private:
-	//
-	// Here you may add anything you want
-	//
     AVLTree<Team,int> teamsTree;
-    RankedTree teamsTreeRanked;
+    //AVLTree<Team*,int> teamsTreeRanked;
     UnionFind playerGroups;
+    HashTable players;
 	
 public:
 	// <DO-NOT-MODIFY> {

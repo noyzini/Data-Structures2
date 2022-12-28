@@ -92,6 +92,14 @@ Team *Player::getTeamPtr() const {
     return this->teamPtr;
 }
 
+Player *Player::getParent() {
+    return this->parent;
+}
+
+void Player::setParent(Player* parent) {
+    this->parent=parent;
+}
+
 Player::~Player() {
     delete nextInHash;
 }
@@ -110,6 +118,14 @@ int Player::getAbility() const {
 
 void Player::setAbility(int newAbility) {
     this->ability = newAbility;
+}
+
+permutation_t Player::getTeamSpirit() {
+    return teamSpirit;
+}
+
+void Player::setTeamSpirit(permutation_t t) {
+    teamSpirit=t;
 }
 
 

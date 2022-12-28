@@ -26,7 +26,7 @@ private:
     AVLTree<Team,int> teamsTree;
     //AVLTree<Team*,int> teamsTreeRanked;
     UnionFind playerGroups;
-    HashTable players;
+    HashTable playersHashTable;
 	
 public:
 	// <DO-NOT-MODIFY> {

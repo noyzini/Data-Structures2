@@ -5,7 +5,7 @@
 #include "UnionFind.h"
 
 Team* UnionFind::find(int playerId) {
-    //finding the team by running up the players parents
+    //finding the team by running up the playersHashTable parents
     //the final source is the root
     Player* source = players.find(playerId);
     if(source== nullptr)
@@ -21,7 +21,7 @@ Team* UnionFind::find(int playerId) {
         sumTeamSpirit=source->getTeamSpirit()*sumTeamSpirit;
     }
     Team* team=source->getTeamPtr();
-    //running up again and making "cuts" connecting players on the chain to the root(source)
+    //running up again and making "cuts" connecting playersHashTable on the chain to the root(source)
     Player* runner= players.find(playerId);
     Player* parent;
     int gamesToSub=0;

@@ -13,7 +13,7 @@ StatusType world_cup_t::add_team(int teamId)
 {
     if (teamId <= 0)
         return StatusType::INVALID_INPUT;
-    if (teamsTree.find(teamId) == nullptr)
+    if (teamsTree.find(teamId) != nullptr)
         return StatusType::FAILURE;
     try {
         Team* newTeam = new Team(teamId);
@@ -46,11 +46,29 @@ StatusType world_cup_t::remove_team(int teamId)
     return StatusType::SUCCESS;
 }
 
-StatusType world_cup_t::add_player(int playerId, int teamId,
-                                   const permutation_t &spirit, int gamesPlayed,
-                                   int ability, int cards, bool goalKeeper)
+StatusType world_cup_t::add_player(int playerId, int teamId, const permutation_t &spirit, int gamesPlayed, int ability, int cards, bool goalKeeper)
 {
-	// TODO: Your code goes here
+    playersHashTable.insert(playerId, spirit, gamesPlayed, ability, cards, goalKeeper);
+    Player* player = playersHashTable.find(playerId);
+    Team* team = teamsTree.find(teamId);
+    if (team == nullptr)
+    {
+
+    }
+
+    if (team->getNumPlayers() == 0)
+    {
+        team->setRootPlayer(player);
+        player->setParent(nullptr);
+        player->setTeamPtr(team);
+    }
+    else
+    {
+        Player* parent = team->getRootPlayer();
+        player->setParent(parent);
+        player->setTeamSpirit(team->getTeamSpirit());
+        //need to add color / r spirit here, after we realize how
+    }
 	return StatusType::SUCCESS;
 }
 

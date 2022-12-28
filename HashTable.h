@@ -28,9 +28,7 @@ private:
 public:
     HashTable();
     ~HashTable();
-    int insert(int playerId, int teamId,
-                const permutation_t &spirit, int gamesPlayed,
-                int ability, int cards, bool goalKeeper);
+    int insert(int playerId, const permutation_t &spirit, int gamesPlayed, int ability, int cards, bool goalKeeper);
     Player* find(int playerId) const;
 };
 

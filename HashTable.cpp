@@ -24,7 +24,7 @@ HashTable::~HashTable() {
 
 }
 
-int HashTable::insert(int playerId, int teamId, const permutation_t &spirit, int gamesPlayed, int ability, int cards,
+int HashTable::insert(int playerId, const permutation_t &spirit, int gamesPlayed, int ability, int cards,
                        bool goalKeeper)
 {
     Player* newPlayer = new Player(playerId,spirit, gamesPlayed,ability,cards,goalKeeper);

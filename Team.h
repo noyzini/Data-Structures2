@@ -3,6 +3,7 @@
 
 #include "Player.h"
 #include "AVLTree.h"
+#include "wet2util.h"
 
 class Player;
 

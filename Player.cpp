@@ -1,7 +1,7 @@
 #include "Player.h"
 
 
-Player::Player(int playerId, const permutation_t &spirit, int gamesPlayed, int ability, int cards,
+Player::Player(int playerId, permutation_t spirit, int gamesPlayed, int ability, int cards,
                bool goalKeeper) :
         playerId(playerId), selfSpirit(spirit), gamesPlayed(gamesPlayed),ability(ability), cards(cards), isGoalKeeper(goalKeeper),parent(
         nullptr),teamPtr(nullptr),negativeFactor(0),rGamesPlayed(0)

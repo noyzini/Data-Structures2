@@ -17,7 +17,7 @@ private:
     bool isGoalKeeper;
     int negativeFactor;
 
-    const permutation_t &selfSpirit;
+    const permutation_t selfSpirit;
     permutation_t teamSpirit; //PI
 
     int rGamesPlayed;
@@ -28,7 +28,7 @@ private:
 
 public:
     Player() = default;
-    Player(int playerId, const permutation_t &spirit, int gamesPlayed, int ability, int cards, bool goalKeeper);
+    Player(int playerId, permutation_t spirit, int gamesPlayed, int ability, int cards, bool goalKeeper);
     //Player(Player& p) = default;
     ~Player();
     int getId() const;

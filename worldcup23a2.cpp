@@ -147,6 +147,10 @@ output_t<int> world_cup_t::num_played_games_for_player(int playerId)
         return StatusType::FAILURE;
     }
     Team* team = playerGroups.find(playerId);
+    if (player == team->getRootPlayer())
+    {
+        return player->getRGamesPlayed() + player->getGamesPlayed();
+    }
     int sum= team->getRootPlayer()->getRGamesPlayed() + player->getRGamesPlayed() + player->getGamesPlayed();
     return sum ;
 }
@@ -224,6 +228,10 @@ output_t<permutation_t> world_cup_t::get_partial_spirit(int playerId)
     if(team== nullptr)
     {
         return StatusType::FAILURE;
+    }
+    if (team->getRootPlayer() == player)
+    {
+        return player->getTeamSpirit() * player->getSelfSpirit();
     }
 	return team->getRootPlayer()->getTeamSpirit()* player->getTeamSpirit()*player->getSelfSpirit();
 }

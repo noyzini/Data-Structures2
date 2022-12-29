@@ -6,7 +6,6 @@ Player::Player(int playerId, const permutation_t &spirit, int gamesPlayed, int a
         playerId(playerId), selfSpirit(spirit), gamesPlayed(gamesPlayed),ability(ability), cards(cards), isGoalKeeper(goalKeeper),parent(
         nullptr),teamPtr(nullptr),negativeFactor(0),rGamesPlayed(0)
 {
-    color = permutation_t::neutral();
     teamSpirit = permutation_t::neutral();
     nextInHash = nullptr;
 }

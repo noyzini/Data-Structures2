@@ -94,7 +94,8 @@ Team *UnionFind::unite(int team1, int team2) {
 
 void UnionFind::removeTeam(int teamId) {
     Team* team =teams->find(teamId);
-    team->getRootPlayer()->setTeamPtr(nullptr);
+    if (team->getRootPlayer() != nullptr)
+        team->getRootPlayer()->setTeamPtr(nullptr);
     team->setRootPlayer(nullptr);
 }
 

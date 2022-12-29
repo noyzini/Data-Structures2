@@ -19,7 +19,6 @@ private:
 
     const permutation_t &selfSpirit;
     permutation_t teamSpirit; //PI
-    permutation_t color;
 
     int rGamesPlayed;
 

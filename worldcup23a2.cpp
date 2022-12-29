@@ -33,7 +33,7 @@ StatusType world_cup_t::remove_team(int teamId)
     if (teamId <= 0)
         return StatusType::INVALID_INPUT;
     Team* team= teamsTree.find(teamId);
-    if(team== nullptr || team->getNumPlayers()>0)
+    if(team== nullptr)
     {
         return StatusType::FAILURE;
     }
@@ -52,27 +52,41 @@ StatusType world_cup_t::remove_team(int teamId)
 StatusType world_cup_t::add_player(int playerId, int teamId, const permutation_t &spirit, int gamesPlayed, int ability, int cards, bool goalKeeper)
 {
     //need to update teamsTreeRanked by removing and adding to the tree
-    playersHashTable.insert(playerId, spirit, gamesPlayed, ability, cards, goalKeeper);
-    Player* player = playersHashTable.find(playerId);
+    if (playerId <= 0 || teamId <= 0 || (!spirit.isvalid()) || gamesPlayed < 0 || cards < 0)
+        return StatusType::INVALID_INPUT;
+    if (playersHashTable.find(playerId) != nullptr)
+        return StatusType::FAILURE;
+
     Team* team = teamsTree.find(teamId);
     if (team == nullptr)
     {
-
+        return StatusType::FAILURE;
     }
+    teamsTreeRanked.remove(*team);
+    playersHashTable.insert(playerId, spirit, gamesPlayed, ability, cards, goalKeeper);
 
+    Player* player = playersHashTable.find(playerId);
     if (team->getNumPlayers() == 0)
     {
         team->setRootPlayer(player);
         player->setParent(nullptr);
         player->setTeamPtr(team);
+        player->setTeamSpirit(permutation_t::neutral());
     }
     else
     {
         Player* parent = team->getRootPlayer();
         player->setParent(parent);
         player->setTeamSpirit(team->getTeamSpirit());
+
         //need to add color / r spirit here, after we realize how
     }
+    team->setTeamSpirit(team->getTeamSpirit() * player->getSelfSpirit());
+    team->setNumPlayers(team->getNumPlayers()+1);
+    if (goalKeeper)
+        team->setNumGoalKeepers(team->getNumGoalKeepers()+1);
+    team->setSumAbility(team->getSumAbility()+player->getAbility());
+    teamsTreeRanked.insert(team, *team);
 	return StatusType::SUCCESS;
 }
 

@@ -53,8 +53,10 @@ void HashTable::doubleArrSize()
         current = arr[i];
         while (current != nullptr)
         {
+            Player* next = current->getNextInHash();
+            current->setNextInHash(nullptr);
             addToArrByFunction(newArr,newTableSize,current);
-            current = current->getNextInHash();
+            current = next;
         }
     }
     tableSize = newTableSize;

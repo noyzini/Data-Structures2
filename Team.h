@@ -47,7 +47,7 @@ public:
     permutation_t getTeamSpirit();
     void setTeamSpirit(permutation_t newSpirit);
 
-    bool operator>(const Tean& team2) const;
+    bool operator>(const Team& team2) const;
     bool operator<(const Team& team2) const;
     bool operator!=(Team& team2) const;
     bool operator==(Team& team2) const;

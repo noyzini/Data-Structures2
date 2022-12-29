@@ -24,7 +24,7 @@
 class world_cup_t {
 private:
     AVLTree<Team,int> teamsTree;
-    //AVLTree<Team*,int> teamsTreeRanked;
+    AVLTree<Team*,Team> teamsTreeRanked;
     UnionFind playerGroups;
     HashTable playersHashTable;
 	

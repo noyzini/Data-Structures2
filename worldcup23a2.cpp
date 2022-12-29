@@ -19,6 +19,7 @@ StatusType world_cup_t::add_team(int teamId)
     try {
         Team* newTeam = new Team(teamId);
         teamsTree.insert(*newTeam,teamId);
+        teamsTreeRanked.insert(newTeam,*newTeam);
         delete newTeam;
     }
     catch (std::bad_alloc& e) {
@@ -37,6 +38,7 @@ StatusType world_cup_t::remove_team(int teamId)
         return StatusType::FAILURE;
     }
     try {
+        teamsTreeRanked.remove(*team);
         playerGroups.removeTeam(teamId);
         teamsTree.remove(teamId);
     }
@@ -49,6 +51,7 @@ StatusType world_cup_t::remove_team(int teamId)
 
 StatusType world_cup_t::add_player(int playerId, int teamId, const permutation_t &spirit, int gamesPlayed, int ability, int cards, bool goalKeeper)
 {
+    //need to update teamsTreeRanked by removing and adding to the tree
     playersHashTable.insert(playerId, spirit, gamesPlayed, ability, cards, goalKeeper);
     Player* player = playersHashTable.find(playerId);
     Team* team = teamsTree.find(teamId);
@@ -183,8 +186,12 @@ output_t<int> world_cup_t::get_team_points(int teamId)
 
 output_t<int> world_cup_t::get_ith_pointless_ability(int i)
 {
-	// TODO: Your code goes here
-	return 12345;
+    if(teamsTreeRanked.getNumberOfNodes() == 0 ||i<0, i>= teamsTreeRanked.getNumberOfNodes() )
+    {
+        return StatusType::FAILURE;
+    }
+    Team* team = teamsTreeRanked.findByIndex(i);
+	return team->getTeamId();
 }
 
 output_t<permutation_t> world_cup_t::get_partial_spirit(int playerId)
@@ -203,8 +210,6 @@ output_t<permutation_t> world_cup_t::get_partial_spirit(int playerId)
     {
         return StatusType::FAILURE;
     }
-
-
 	return team->getRootPlayer()->getTeamSpirit()* player->getTeamSpirit()*player->getSelfSpirit();
 }
 
@@ -219,6 +224,14 @@ StatusType world_cup_t::buy_team(int teamId1, int teamId2)
     if (team1 == nullptr || team2 == nullptr) {
         return StatusType::FAILURE;
     }
-    Team* unitedTeam = playerGroups.unite(teamId1,teamId2);
+    try{
+        teamsTreeRanked.remove(*team2);
+        teamsTreeRanked.remove(*team1);
+        Team* unitedTeam = playerGroups.unite(teamId1,teamId2);
+        teamsTreeRanked.insert(unitedTeam,*unitedTeam);
+    }
+    catch (std::bad_alloc& e) {
+        return StatusType::ALLOCATION_ERROR;
+    }
 	return StatusType::SUCCESS;
 }

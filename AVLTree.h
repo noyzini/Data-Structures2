@@ -31,6 +31,8 @@ public:
     Node<T,KEY>* getSubTree(Node<T,KEY>* node, KEY min, KEY max);
 
     Node<T, KEY> *getSubTree(Node<T, KEY> *node, KEY min, KEY max, Node<T, KEY> **keepLastHere);
+
+    T findByIndex(int index);
 private:
     Node<T,KEY>* root;
     int numNodes;
@@ -702,6 +704,29 @@ Node<T, KEY>* AVLTree<T, KEY>::getSubTree(Node<T,KEY>* node, KEY min, KEY max, N
     *keepLastHere = temp;
     (*keepLastHere)->right = nullptr;
     return linkedList;
+}
+
+template<class T, typename KEY>
+T AVLTree<T, KEY>::findByIndex(int index) {
+    Node<T,KEY>* temp= this->root;
+    int count=index;
+    if(index> this->numNodes-1)
+        return nullptr;
+    while (temp!= nullptr)
+    {
+        if(temp->numChildLeft==count){
+            return temp->data;
+        }
+        if(temp->numChildLeft<count)
+        {
+            count+= -temp->numChildLeft-1;
+            temp= temp->right;
+        } else
+        {
+            temp= temp->left;
+        }
+    }
+    return nullptr;
 }
 
 #endif //DATA_STRUCTURES_AVLTREE_H

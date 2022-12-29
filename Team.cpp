@@ -83,6 +83,26 @@ void Team::setTeamSpirit(permutation_t newSpirit) {
     teamSpirit=newSpirit;
 }
 
+bool Team::operator>(const Team& team2) const {
+    //team1 > team2:
+    if(this->getSumAbility()== team2.getSumAbility())
+        return (this->teamId > team2.getTeamId());
+    return (this->getSumAbility()> team2.getSumAbility());
 
+}
 
+bool Team::operator<(const Team& team2) const {
+    //team1 < team2:
+    return team2 > *this;
+}
+
+bool Team::operator==(Team &team2) const {
+    if(this->getSumAbility()== team2.getSumAbility() &&this->teamId==team2.getTeamId() )
+        return true;
+    return false;
+}
+
+bool Team::operator!=(Team &team2) const {
+    return !(*this==team2);
+}
 

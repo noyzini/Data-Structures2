@@ -12,11 +12,13 @@ public:
     Node* left;
     Node* parent;
     int height;
+    int numChildLeft;
+    int numChildRight;
 };
 
 template<class T, typename KEY>
 Node<T, KEY>::Node(T& data, KEY& key, Node* parent):
-        data(data),key(key),right(nullptr),left(nullptr),parent(parent) , height(1)
+        data(data),key(key),right(nullptr),left(nullptr),parent(parent) , height(1),numChildLeft(0),numChildRight(0)
 {}
 
 

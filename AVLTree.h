@@ -21,6 +21,7 @@ public:
     void rotate_left(Node<T,KEY>* b);
     void delete_recursively(Node<T,KEY>* node);
     Node<T,KEY>* findNode( KEY key);
+    Node<T,KEY>* findNodeRemove( KEY key);
     int extractInOrder(Node<T, KEY> *node, Node<T, KEY>** arr);
     int getNumberOfNodes() const;
     T* findClosestRight(Node<T,KEY>* node) ;
@@ -58,6 +59,27 @@ Node<T,KEY>* AVLTree<T,KEY>::findNode( KEY key) {
             temp=temp->left;
         else
             temp=temp->right;
+    }
+    if(temp== nullptr)
+        return nullptr;
+    return temp;
+}
+
+template<class T,typename KEY>
+Node<T,KEY>* AVLTree<T,KEY>::findNodeRemove( KEY key) {
+    Node<T,KEY>* temp= this->root;
+    while (temp!= nullptr && temp->key!=key)
+    {
+        if(temp->key > key)
+        {
+            temp->numChildLeft--;
+            temp=temp->left;
+        }
+        else
+        {
+            temp->numChildRight--;
+            temp=temp->right;
+        }
     }
     if(temp== nullptr)
         return nullptr;
@@ -143,10 +165,9 @@ int AVLTree<T, KEY>::getBalanceFactor(const Node<T,KEY>* node) const
 template<class T,typename KEY>
 void AVLTree<T,KEY>::remove(KEY key)
 {
-    Node<T,KEY>* to_delete= findNode(key);
+    Node<T,KEY>* to_delete= findNodeRemove(key);
     if (to_delete== nullptr)
         return;
-
     Node<T,KEY>* parent= to_delete->parent;
     Node<T,KEY>* balanceFrom = parent;
     //for a leaf
@@ -226,12 +247,21 @@ void AVLTree<T,KEY>::remove(KEY key)
             }
             replace->left = to_delete->left;
             if (replace->left != nullptr)
+            {
                 replace->left->parent = replace;
+                replace->numChildLeft = replace->left->numChildLeft + replace->left->numChildRight + 1;
+            }
+            else
+            {
+                replace->numChildLeft = 0;
+            }
+
         }
         else //someone left to the right son is the successor
         {
             while (replace->left!= nullptr)
             {
+                replace->numChildLeft--;
                 replace=replace->left;
             }
             Node<T,KEY>* replace_parent=replace->parent;
@@ -244,11 +274,15 @@ void AVLTree<T,KEY>::remove(KEY key)
 
 
             replace->right=to_delete->right;
+            replace->numChildRight=to_delete->right->numChildRight+to_delete->right->numChildLeft+1;
             to_delete->right->parent=replace;
 
             replace->left=to_delete->left;
             if (to_delete->left!= nullptr)
+            {
+                replace->numChildLeft=to_delete->left->numChildRight+to_delete->left->numChildLeft+1;
                 to_delete->left->parent=replace;
+            }
 
             replace->parent=to_delete->parent;
             if(to_delete->parent== nullptr)
@@ -294,15 +328,24 @@ Node<T, KEY> *AVLTree<T, KEY>::addToTree(T& data, KEY& key) {
     {
         keep=temp;
         if(temp->key > key)
+        {
+            temp->numChildLeft++;
             temp=temp->left;
-        else
-            temp=temp->right;
+        }
+        else {
+            temp->numChildRight++;
+            temp = temp->right;
+        }
     }
     Node<T,KEY>* to_add= new Node<T,KEY>(data,key,keep);
     if(keep->key > key)
+    {
         keep->left=to_add;
+    }
     else
+    {
         keep->right=to_add;
+    }
     return to_add;
 }
 
@@ -310,9 +353,13 @@ template<class T,typename KEY>
 void AVLTree<T,KEY>::rotate_left(Node<T, KEY>* b) {
     Node<T,KEY>* a=b->left;
     b->left=a->right;
+    b->numChildLeft+= -a->numChildLeft-1;
     if(a->right!= nullptr)
+    {
         a->right->parent=b;
+    }
     a->right=b;
+    a->numChildRight+=b->numChildRight+1;
     a->parent=b->parent;
     b->parent=a;
     if (a->parent == nullptr) //is root
@@ -333,9 +380,11 @@ void AVLTree<T,KEY>::rotate_right(Node<T, KEY> *a)
 {
     Node<T,KEY>* b=a->right;
     a->right=b->left;
+    a->numChildRight+= -b->numChildRight-1;
     if(b->left!= nullptr)
         b->left->parent=a;
     b->left=a;
+    b->numChildLeft+= a->numChildLeft+1;
     b->parent=a->parent;
     a->parent=b;
     if (b->parent == nullptr) //is root

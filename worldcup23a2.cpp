@@ -19,8 +19,9 @@ StatusType world_cup_t::add_team(int teamId)
     try {
         Team* newTeam = new Team(teamId);
         teamsTree.insert(*newTeam,teamId);
-        teamsTreeRanked.insert(newTeam,*newTeam);
         delete newTeam;
+        newTeam = teamsTree.find(teamId);
+        teamsTreeRanked.insert(newTeam,*newTeam);
     }
     catch (std::bad_alloc& e) {
         return StatusType::ALLOCATION_ERROR;

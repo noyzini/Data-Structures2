@@ -52,6 +52,7 @@ StatusType world_cup_t::remove_team(int teamId)
 
 StatusType world_cup_t::add_player(int playerId, int teamId, const permutation_t &spirit, int gamesPlayed, int ability, int cards, bool goalKeeper)
 {
+    //try catch!
     //need to update teamsTreeRanked by removing and adding to the tree
     if (playerId <= 0 || teamId <= 0 || (!spirit.isvalid()) || gamesPlayed < 0 || cards < 0)
         return StatusType::INVALID_INPUT;
@@ -146,13 +147,20 @@ output_t<int> world_cup_t::num_played_games_for_player(int playerId)
     {
         return StatusType::FAILURE;
     }
+    int sum = player->getGamesPlayed();
+    while (player != nullptr)
+    {
+        sum+= player->getRGamesPlayed();
+        player = player->getParent();
+    }
+    return sum;
     Team* team = playerGroups.find(playerId);
     if (player == team->getRootPlayer())
     {
         return player->getRGamesPlayed() + player->getGamesPlayed();
     }
-    int sum= team->getRootPlayer()->getRGamesPlayed() + player->getRGamesPlayed() + player->getGamesPlayed();
-    return sum ;
+    int sum_old= team->getRootPlayer()->getRGamesPlayed() + player->getRGamesPlayed() + player->getGamesPlayed();
+    return sum_old ;
 }
 
 StatusType world_cup_t::add_player_cards(int playerId, int cards)

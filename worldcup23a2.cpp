@@ -68,6 +68,7 @@ StatusType world_cup_t::add_player(int playerId, int teamId, const permutation_t
     playersHashTable.insert(playerId, spirit, gamesPlayed, ability, cards, goalKeeper);
 
     Player* player = playersHashTable.find(playerId);
+
     if (team->getNumPlayers() == 0)
     {
         team->setRootPlayer(player);
@@ -80,7 +81,7 @@ StatusType world_cup_t::add_player(int playerId, int teamId, const permutation_t
         Player* parent = team->getRootPlayer();
         player->setParent(parent);
         player->setTeamSpirit(team->getTeamSpirit());
-
+        player->setNegativeFactor(team->getRootPlayer()->getRGamesPlayed());
         //need to add color / r spirit here, after we realize how
     }
     team->setTeamSpirit(team->getTeamSpirit() * player->getSelfSpirit());
@@ -147,7 +148,7 @@ output_t<int> world_cup_t::num_played_games_for_player(int playerId)
     {
         return StatusType::FAILURE;
     }
-    int sum = player->getGamesPlayed();
+    int sum = player->getGamesPlayed() - player->getNegativeFactor();
     while (player != nullptr)
     {
         sum+= player->getRGamesPlayed();
@@ -230,6 +231,7 @@ output_t<permutation_t> world_cup_t::get_partial_spirit(int playerId)
     {
         return StatusType::FAILURE;
     }
+    team->getRootPlayer();
     if (team->getRootPlayer() == player)
     {
         permutation_t t=player->getTeamSpirit() * player->getSelfSpirit();

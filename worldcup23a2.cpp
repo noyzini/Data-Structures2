@@ -105,7 +105,7 @@ output_t<int> world_cup_t::play_match(int teamId1, int teamId2)
             return StatusType::FAILURE;
         }
         team1->getRootPlayer()->setRGamesPlayed(team1->getRootPlayer()->getRGamesPlayed()+1);
-        team2->getRootPlayer()->setRGamesPlayed(team1->getRootPlayer()->getRGamesPlayed()+1);
+        team2->getRootPlayer()->setRGamesPlayed(team2->getRootPlayer()->getRGamesPlayed()+1);
         if (team1->getScore() == team2->getScore()) {
             if(team1->getTeamSpirit().strength()==team2->getTeamSpirit().strength())
             {
@@ -213,7 +213,7 @@ output_t<int> world_cup_t::get_team_points(int teamId)
 
 output_t<int> world_cup_t::get_ith_pointless_ability(int i)
 {
-    if(teamsTreeRanked.getNumberOfNodes() == 0 ||i<0, i>= teamsTreeRanked.getNumberOfNodes() )
+    if(teamsTreeRanked.getNumberOfNodes() == 0 ||i<0 || i>= teamsTreeRanked.getNumberOfNodes() )
     {
         return StatusType::FAILURE;
     }

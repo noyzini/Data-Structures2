@@ -57,7 +57,7 @@ Team *UnionFind::unite(int team1, int team2) {
         if(bought->getNumPlayers()!=0) {
             bought->getRootPlayer()->setParent(buyer->getRootPlayer());
             //updating for spirit
-            bought->getRootPlayer()->setTeamSpirit(buyer->getTeamSpirit() * bought->getRootPlayer()->getTeamSpirit());
+            bought->getRootPlayer()->setTeamSpirit(buyer->getRootPlayer()->getTeamSpirit().inv()*buyer->getTeamSpirit() * bought->getRootPlayer()->getTeamSpirit());
             buyer->setTeamSpirit(buyer->getTeamSpirit() * bought->getTeamSpirit());
             //updating games played
             bought->getRootPlayer()->setRGamesPlayed(

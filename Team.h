@@ -16,9 +16,9 @@ private:
     int numGoalKeepers;
     int sumAbility;
     int gamesPlayedFactor;
-
-    permutation_t teamSpirit;
     Player* rootPlayer;
+    permutation_t teamSpirit;
+
 
 public:
 

@@ -239,7 +239,8 @@ output_t<permutation_t> world_cup_t::get_partial_spirit(int playerId)
     }
     if (team->getRootPlayer() == player)
     {
-        return player->getTeamSpirit() * player->getSelfSpirit();
+        permutation_t t=player->getTeamSpirit() * player->getSelfSpirit();
+        return t;
     }
 	return team->getRootPlayer()->getTeamSpirit()* player->getTeamSpirit()*player->getSelfSpirit();
 }

@@ -13,9 +13,9 @@ class HashTable
 private:
 
     static const int INIT_TABLE_SIZE = 10;
-    Player** arr; //dynamic arr
     int tableSize;
     int numPlayers;
+    Player** arr; //dynamic arr
     const int LOAD_FACTOR = 1;
 
 

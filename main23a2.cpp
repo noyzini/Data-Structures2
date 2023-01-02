@@ -13,7 +13,10 @@
 #include "worldcup23a2.h"
 #include <string>
 #include <iostream>
-
+#include "UnionFind.h"
+#include "HashTable.h"
+#include "AVLTree.h"
+#include <assert.h>
 using namespace std;
 
 istream& operator>>(istream &in, permutation_t &obj)
@@ -31,6 +34,36 @@ void print(string cmd, output_t<T> res);
 
 int main()
 {
+
+    world_cup_t* obj = new world_cup_t();
+
+    StatusType res = obj->add_team(1);
+    assert(res == StatusType::SUCCESS);
+    res = obj->add_team(2);
+    assert(res == StatusType::SUCCESS);
+    res = obj->add_player(1001, 1, permutation_t::neutral(), 1, 0, 0, true);
+    assert(res == StatusType::SUCCESS);
+    res = obj->add_player(2001, 2, permutation_t::neutral(), 0, 0, 0, true);
+    assert(res == StatusType::SUCCESS);
+    output_t<int> res1 = obj->num_played_games_for_player(1001);
+    assert(res1.status() == StatusType::SUCCESS);
+    assert(res1.ans() == 1);
+    output_t<int> res2 = obj->num_played_games_for_player(2001);
+    assert(res2.status() == StatusType::SUCCESS);
+    assert(res2.ans() == 0);
+    output_t<int> res3 = obj->play_match(1, 2);
+    assert(res3.status() == StatusType::SUCCESS);
+    assert(res3.ans() == 0);
+    output_t<int> res4 = obj->num_played_games_for_player(1001);
+    assert(res4.status() == StatusType::SUCCESS);
+    assert(res4.ans() == 2);
+    output_t<int> res5 = obj->num_played_games_for_player(2001);
+    assert(res5.status() == StatusType::SUCCESS);
+    assert(res5.ans() == 1);
+
+
+    delete obj;
+/*
     int* x = new int(4);
 
 	cin >> std::boolalpha;
@@ -39,7 +72,7 @@ int main()
 	int d1, d2, d3;
 	permutation_t p1;
 	bool b1;
-	
+
 	// Init
 	world_cup_t *obj = new world_cup_t();
 	
@@ -118,8 +151,10 @@ int main()
 	
 	// Quit 
 	delete obj;
+*/
 	return 0;
 }
+
 
 // Helpers
 static const char *StatusTypeStr[] =

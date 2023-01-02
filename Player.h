@@ -11,20 +11,27 @@ class Player {
 private:
 
     int playerId;
-    int cards;
+    const permutation_t selfSpirit;
+
     int gamesPlayed;
     int ability;
+    int cards;
     bool isGoalKeeper;
-    int negativeFactor;
 
-    const permutation_t selfSpirit;
-    permutation_t teamSpirit; //PI
 
-    int rGamesPlayed;
-
-    Player* nextInHash;
     Player* parent;
     Team* teamPtr;
+    int negativeFactor;
+    int rGamesPlayed;
+    permutation_t teamSpirit; //PI
+    Player* nextInHash;
+
+
+
+
+
+
+
 
 public:
     Player() = default;

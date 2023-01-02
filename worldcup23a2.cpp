@@ -80,7 +80,7 @@ StatusType world_cup_t::add_player(int playerId, int teamId, const permutation_t
     {
         Player* parent = team->getRootPlayer();
         player->setParent(parent);
-        player->setTeamSpirit(team->getTeamSpirit());
+        player->setTeamSpirit(parent->getTeamSpirit().inv() * team->getTeamSpirit());
         player->setNegativeFactor(team->getRootPlayer()->getRGamesPlayed());
         //need to add color / r spirit here, after we realize how
     }
@@ -231,13 +231,12 @@ output_t<permutation_t> world_cup_t::get_partial_spirit(int playerId)
     {
         return StatusType::FAILURE;
     }
-    team->getRootPlayer();
     if (team->getRootPlayer() == player)
     {
         permutation_t t=player->getTeamSpirit() * player->getSelfSpirit();
         return t;
     }
-	return team->getRootPlayer()->getTeamSpirit()* player->getTeamSpirit()*player->getSelfSpirit();
+	return team->getRootPlayer()->getTeamSpirit() * player->getTeamSpirit() * player->getSelfSpirit();
 }
 
 StatusType world_cup_t::buy_team(int teamId1, int teamId2)

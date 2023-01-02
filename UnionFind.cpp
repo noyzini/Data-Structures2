@@ -34,10 +34,10 @@ Team* UnionFind::find(int playerId) {
         int newGamesPlayed=sumGames-gamesToSub;
         gamesToSub+=runner->getRGamesPlayed();
         permutation_t newSpirit=sumTeamSpirit*subTeamSpirit.inv();
-        subTeamSpirit=runner->getTeamSpirit()*subTeamSpirit;
+        subTeamSpirit=runner->getParent()->getTeamSpirit()*subTeamSpirit;
 
         runner->setRGamesPlayed(newGamesPlayed);
-         runner->setTeamSpirit(newSpirit);
+        runner->setTeamSpirit(newSpirit);
 
         runner=parent;
     }

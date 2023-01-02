@@ -37,7 +37,7 @@ Team* UnionFind::find(int playerId) {
         subTeamSpirit=runner->getTeamSpirit()*subTeamSpirit;
 
         runner->setRGamesPlayed(newGamesPlayed);
-        runner->setTeamSpirit(newSpirit);
+         runner->setTeamSpirit(newSpirit);
 
         runner=parent;
     }
@@ -84,7 +84,7 @@ Team *UnionFind::unite(int team1, int team2) {
         bought->getRootPlayer()->setTeamPtr(buyer);
     }
     buyer->addPoints(bought->getPoints());
-    buyer->setNumPlayers(bought->getNumPlayers());
+    buyer->setNumPlayers(bought->getNumPlayers()+buyer->getNumPlayers());
     buyer->setNumGoalKeepers(buyer->getNumGoalKeepers()+bought->getNumGoalKeepers());
     buyer->setSumAbility(buyer->getSumAbility()+bought->getSumAbility());
 

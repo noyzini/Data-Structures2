@@ -7,7 +7,6 @@ world_cup_t::world_cup_t() : playerGroups(UnionFind(&teamsTree,playersHashTable)
 
 world_cup_t::~world_cup_t()
 {
-    // TODO: Your code goes here
 }
 
 StatusType world_cup_t::add_team(int teamId)
@@ -52,45 +51,43 @@ StatusType world_cup_t::remove_team(int teamId)
 
 StatusType world_cup_t::add_player(int playerId, int teamId, const permutation_t &spirit, int gamesPlayed, int ability, int cards, bool goalKeeper)
 {
-    //try catch!
-    //need to update teamsTreeRanked by removing and adding to the tree
     if (playerId <= 0 || teamId <= 0 || (!spirit.isvalid()) || gamesPlayed < 0 || cards < 0)
         return StatusType::INVALID_INPUT;
     if (playersHashTable.find(playerId) != nullptr)
         return StatusType::FAILURE;
+    try {
+        Team *team = teamsTree.find(teamId);
+        if (team == nullptr) {
+            return StatusType::FAILURE;
+        }
+        teamsTreeRanked.remove(*team);
+        playersHashTable.insert(playerId, spirit, gamesPlayed, ability, cards, goalKeeper);
 
-    Team* team = teamsTree.find(teamId);
-    if (team == nullptr)
-    {
-        return StatusType::FAILURE;
-    }
-    teamsTreeRanked.remove(*team);
-    playersHashTable.insert(playerId, spirit, gamesPlayed, ability, cards, goalKeeper);
+        Player *player = playersHashTable.find(playerId);
 
-    Player* player = playersHashTable.find(playerId);
-
-    if (team->getNumPlayers() == 0)
-    {
-        team->setRootPlayer(player);
-        player->setParent(nullptr);
-        player->setTeamPtr(team);
-        player->setTeamSpirit(permutation_t::neutral());
+        if (team->getNumPlayers() == 0) {
+            team->setRootPlayer(player);
+            player->setParent(nullptr);
+            player->setTeamPtr(team);
+            player->setRSpirit(permutation_t::neutral());
+        } else {
+            Player *parent = team->getRootPlayer();
+            player->setParent(parent);
+            player->setRSpirit(parent->getRSpirit().inv() * team->getTeamSpirit());
+            player->setNegativeFactor(team->getRootPlayer()->getRGamesPlayed());
+        }
+        team->setTeamSpirit(team->getTeamSpirit() * player->getSelfSpirit());
+        team->setNumPlayers(team->getNumPlayers() + 1);
+        if (goalKeeper)
+            team->setNumGoalKeepers(team->getNumGoalKeepers() + 1);
+        team->setSumAbility(team->getSumAbility() + player->getAbility());
+        teamsTreeRanked.insert(team, *team);
     }
-    else
+    catch (const std::bad_alloc& e)
     {
-        Player* parent = team->getRootPlayer();
-        player->setParent(parent);
-        player->setTeamSpirit(parent->getTeamSpirit().inv() * team->getTeamSpirit());
-        player->setNegativeFactor(team->getRootPlayer()->getRGamesPlayed());
-        //need to add color / r spirit here, after we realize how
+        return StatusType::ALLOCATION_ERROR;
     }
-    team->setTeamSpirit(team->getTeamSpirit() * player->getSelfSpirit());
-    team->setNumPlayers(team->getNumPlayers()+1);
-    if (goalKeeper)
-        team->setNumGoalKeepers(team->getNumGoalKeepers()+1);
-    team->setSumAbility(team->getSumAbility()+player->getAbility());
-    teamsTreeRanked.insert(team, *team);
-	return StatusType::SUCCESS;
+    return StatusType::SUCCESS;
 }
 
 output_t<int> world_cup_t::play_match(int teamId1, int teamId2)
@@ -160,7 +157,7 @@ output_t<int> world_cup_t::num_played_games_for_player(int playerId)
 
 StatusType world_cup_t::add_player_cards(int playerId, int cards)
 {
-    if(playerId<=0|| cards<0)
+    if(playerId<=0 || cards<0)
     {
         return StatusType::INVALID_INPUT;
     }
@@ -234,10 +231,10 @@ output_t<permutation_t> world_cup_t::get_partial_spirit(int playerId)
     }
     if (team->getRootPlayer() == player)
     {
-        permutation_t t=player->getTeamSpirit() * player->getSelfSpirit();
+        permutation_t t= player->getRSpirit() * player->getSelfSpirit();
         return t;
     }
-	return team->getRootPlayer()->getTeamSpirit() * player->getTeamSpirit() * player->getSelfSpirit();
+	return team->getRootPlayer()->getRSpirit() * player->getRSpirit() * player->getSelfSpirit();
 }
 
 StatusType world_cup_t::buy_team(int teamId1, int teamId2)

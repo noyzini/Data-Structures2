@@ -11,12 +11,11 @@
 // 
 
 #include "worldcup23a2.h"
+#include "HashTable.h"
 #include <string>
 #include <iostream>
-#include "UnionFind.h"
-#include "HashTable.h"
-#include "AVLTree.h"
-#include <assert.h>
+#include <cassert>
+
 using namespace std;
 
 istream& operator>>(istream &in, permutation_t &obj)
@@ -34,11 +33,9 @@ void print(string cmd, StatusType res);
 template<typename T>
 void print(string cmd, output_t<T> res);
 
+
 int main()
 {
-
-
-
 	cin >> std::boolalpha;
 	
 	int pid, tid, tid2;
@@ -101,15 +98,19 @@ int main()
 		else if(!op.compare("get_partial_spirit"))
 		{
 			cin >> pid;
-            if(pid==15)
+            if (pid == 15)
             {
-            std::cout<<"";
+                std::cout << "";
             }
 			print(op, obj->get_partial_spirit(pid));
 		}
 		else if(!op.compare("buy_team"))
 		{
 			cin >> tid >> tid2;
+            if (tid2 == 52 || tid2 == 4)
+            {
+                std::cout << "";
+            }
 			print(op, obj->buy_team(tid, tid2));
 		}
 		else

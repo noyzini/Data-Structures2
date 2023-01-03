@@ -1,7 +1,3 @@
-//
-// Created by Noy Zini on 28/12/2022.
-//
-
 #include "UnionFind.h"
 
 Team* UnionFind::find(int playerId) {
@@ -17,7 +13,7 @@ Team* UnionFind::find(int playerId) {
     while (source->getParent()!= nullptr)
     {
         sumGames+=source->getRGamesPlayed();
-        sumTeamSpirit=source->getTeamSpirit()*sumTeamSpirit;
+        sumTeamSpirit= source->getRSpirit() * sumTeamSpirit;
         source=source->getParent();
     }
     Team* team=source->getTeamPtr();
@@ -34,10 +30,10 @@ Team* UnionFind::find(int playerId) {
         int newGamesPlayed=sumGames-gamesToSub;
         gamesToSub+=runner->getRGamesPlayed();
         permutation_t newSpirit=sumTeamSpirit*subTeamSpirit.inv();
-        subTeamSpirit=runner->getTeamSpirit()*subTeamSpirit;
+        subTeamSpirit= runner->getRSpirit() * subTeamSpirit;
 
         runner->setRGamesPlayed(newGamesPlayed);
-        runner->setTeamSpirit(newSpirit);
+        runner->setRSpirit(newSpirit);
 
         runner=parent;
     }
@@ -57,8 +53,8 @@ Team *UnionFind::unite(int team1, int team2) {
         if(bought->getNumPlayers()!=0) {
             bought->getRootPlayer()->setParent(buyer->getRootPlayer());
             //updating for spirit
-            bought->getRootPlayer()->setTeamSpirit(buyer->getRootPlayer()->getTeamSpirit().inv()*buyer->getTeamSpirit()
-                                        * bought->getRootPlayer()->getTeamSpirit());
+            bought->getRootPlayer()->setRSpirit(buyer->getRootPlayer()->getRSpirit().inv() * buyer->getTeamSpirit()
+                                                * bought->getRootPlayer()->getRSpirit());
             buyer->setTeamSpirit(buyer->getTeamSpirit() * bought->getTeamSpirit());
             //updating games played
             bought->getRootPlayer()->setRGamesPlayed(
@@ -72,9 +68,9 @@ Team *UnionFind::unite(int team1, int team2) {
         if(buyer->getNumPlayers()!=0) {
             buyer->getRootPlayer()->setParent(bought->getRootPlayer());
             //updating for spirit
-            bought->getRootPlayer()->setTeamSpirit(buyer->getTeamSpirit() * bought->getRootPlayer()->getTeamSpirit());
-            buyer->getRootPlayer()->setTeamSpirit(
-                    bought->getRootPlayer()->getTeamSpirit().inv() * buyer->getRootPlayer()->getTeamSpirit());
+            bought->getRootPlayer()->setRSpirit(buyer->getTeamSpirit() * bought->getRootPlayer()->getRSpirit());
+            buyer->getRootPlayer()->setRSpirit(
+                    bought->getRootPlayer()->getRSpirit().inv() * buyer->getRootPlayer()->getRSpirit());
 
             //updating games played
             buyer->getRootPlayer()->setRGamesPlayed(buyer->getRootPlayer()->getRGamesPlayed() - bought->getRootPlayer()->getRGamesPlayed());
@@ -89,7 +85,6 @@ Team *UnionFind::unite(int team1, int team2) {
     buyer->setNumPlayers(bought->getNumPlayers()+buyer->getNumPlayers());
     buyer->setNumGoalKeepers(buyer->getNumGoalKeepers()+bought->getNumGoalKeepers());
     buyer->setSumAbility(buyer->getSumAbility()+bought->getSumAbility());
-
     this->teams->remove(team2);
     return buyer;
 }

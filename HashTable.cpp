@@ -1,10 +1,4 @@
-//
-// Created by aviaa on 28/12/2022.
-//
-
 #include "HashTable.h"
-
-//const int INIT_TABLE_SIZE = 10;
 
 HashTable::HashTable() : tableSize(INIT_TABLE_SIZE), numPlayers(0), arr(new Player*[INIT_TABLE_SIZE])
 {

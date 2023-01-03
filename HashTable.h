@@ -1,7 +1,3 @@
-//
-// Created by aviaa on 28/12/2022.
-//
-
 #ifndef DATA_STRUCTURES2_HASHTABLE_H
 #define DATA_STRUCTURES2_HASHTABLE_H
 
@@ -17,7 +13,6 @@ private:
     int numPlayers;
     Player** arr; //dynamic arr
     const int LOAD_FACTOR = 1;
-
 
     static const int ERROR_PLAYER_EXISTS = -1;
     static const int OK = 1;

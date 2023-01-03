@@ -6,7 +6,7 @@ Player::Player(int playerId, permutation_t spirit, int gamesPlayed, int ability,
         playerId(playerId), selfSpirit(spirit), gamesPlayed(gamesPlayed),ability(ability), cards(cards), isGoalKeeper(goalKeeper),parent(
         nullptr),teamPtr(nullptr),negativeFactor(0),rGamesPlayed(0)
 {
-    teamSpirit = permutation_t::neutral();
+    RSpirit = permutation_t::neutral();
     nextInHash = nullptr;
 }
 
@@ -35,37 +35,6 @@ bool Player::getIsGoalKeeper() const {
     return isGoalKeeper;
 }
 
-/*
-bool Player::operator>(const Player& player2) const  {
-    //player1 > player2:
-    if (this->goals != player2.goals)
-        return this->goals > player2.goals;
-    if (this->cards != player2.cards)
-        return this->cards < player2.cards;
-    return this->playerId > player2.playerId;
-}
-
-bool Player::operator<(const Player& player2) const {
-    //player1 < player2
-    return player2 > *this;
-}
-
-void Player::setNextBetter(Player *player) {
-    this->nextBetter = player;
-}
-
-Player* Player::getNextBetter() {
-    return nextBetter;
-}
-
-void Player::setNextWorse(Player *player) {
-    this->nextWorse = player;
-}
-
-Player *Player::getNextWorse() {
-    return nextWorse;
-}
-*/
 void Player::setNegativeFactor(int factor) {
     this->negativeFactor=factor;
 }
@@ -73,16 +42,6 @@ void Player::setNegativeFactor(int factor) {
 int Player::getNegativeFactor() const {
     return this->negativeFactor;
 }
-
-/*
-bool Player::operator==(Player &player2) const {
-    return (this->playerId==player2.playerId);
-}
-
-bool Player::operator!=(Player &player2) const {
-    return !(*this==player2);
-}
- */
 
 void Player::setTeamPtr(Team *t) {
     this->teamPtr=t;
@@ -120,12 +79,12 @@ void Player::setAbility(int newAbility) {
     this->ability = newAbility;
 }
 
-permutation_t Player::getTeamSpirit() {
-    return teamSpirit;
+permutation_t Player::getRSpirit() {
+    return RSpirit;
 }
 
-void Player::setTeamSpirit(permutation_t t) {
-    teamSpirit=t;
+void Player::setRSpirit(permutation_t t) {
+    RSpirit=t;
 }
 
 int Player::getRGamesPlayed() const {

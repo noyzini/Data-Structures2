@@ -148,12 +148,13 @@ output_t<int> world_cup_t::num_played_games_for_player(int playerId)
     {
         return StatusType::FAILURE;
     }
-    int sum = player->getGamesPlayed() - player->getNegativeFactor();
-    while (player != nullptr)
+    playerGroups.find(playerId);
+    int sum = player->getRGamesPlayed() - player->getNegativeFactor() + player->getGamesPlayed();
+    if(player->getParent() == nullptr)
     {
-        sum+= player->getRGamesPlayed();
-        player = player->getParent();
+        return sum;
     }
+    sum += player->getParent()->getRGamesPlayed();
     return sum;
 }
 

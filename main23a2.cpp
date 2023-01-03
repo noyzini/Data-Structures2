@@ -38,6 +38,7 @@ int main()
 {
 
 
+
 	cin >> std::boolalpha;
 	
 	int pid, tid, tid2;
@@ -100,6 +101,10 @@ int main()
 		else if(!op.compare("get_partial_spirit"))
 		{
 			cin >> pid;
+            if(pid==15)
+            {
+            std::cout<<"";
+            }
 			print(op, obj->get_partial_spirit(pid));
 		}
 		else if(!op.compare("buy_team"))

@@ -34,7 +34,7 @@ Team* UnionFind::find(int playerId) {
         int newGamesPlayed=sumGames-gamesToSub;
         gamesToSub+=runner->getRGamesPlayed();
         permutation_t newSpirit=sumTeamSpirit*subTeamSpirit.inv();
-        subTeamSpirit=runner->getParent()->getTeamSpirit()*subTeamSpirit;
+        subTeamSpirit=runner->getTeamSpirit()*subTeamSpirit;
 
         runner->setRGamesPlayed(newGamesPlayed);
         runner->setTeamSpirit(newSpirit);
@@ -57,7 +57,8 @@ Team *UnionFind::unite(int team1, int team2) {
         if(bought->getNumPlayers()!=0) {
             bought->getRootPlayer()->setParent(buyer->getRootPlayer());
             //updating for spirit
-            bought->getRootPlayer()->setTeamSpirit(buyer->getRootPlayer()->getTeamSpirit().inv()*buyer->getTeamSpirit() * bought->getRootPlayer()->getTeamSpirit());
+            bought->getRootPlayer()->setTeamSpirit(buyer->getRootPlayer()->getTeamSpirit().inv()*buyer->getTeamSpirit()
+                                        * bought->getRootPlayer()->getTeamSpirit());
             buyer->setTeamSpirit(buyer->getTeamSpirit() * bought->getTeamSpirit());
             //updating games played
             bought->getRootPlayer()->setRGamesPlayed(
@@ -74,12 +75,13 @@ Team *UnionFind::unite(int team1, int team2) {
             bought->getRootPlayer()->setTeamSpirit(buyer->getTeamSpirit() * bought->getRootPlayer()->getTeamSpirit());
             buyer->getRootPlayer()->setTeamSpirit(
                     bought->getRootPlayer()->getTeamSpirit().inv() * buyer->getRootPlayer()->getTeamSpirit());
-            buyer->setTeamSpirit(buyer->getTeamSpirit() * bought->getTeamSpirit());
+
             //updating games played
             buyer->getRootPlayer()->setRGamesPlayed(buyer->getRootPlayer()->getRGamesPlayed() - bought->getRootPlayer()->getRGamesPlayed());
 
             buyer->getRootPlayer()->setTeamPtr(nullptr);
         }
+        buyer->setTeamSpirit(buyer->getTeamSpirit() * bought->getTeamSpirit());
         buyer->setRootPlayer(bought->getRootPlayer());
         bought->getRootPlayer()->setTeamPtr(buyer);
     }
